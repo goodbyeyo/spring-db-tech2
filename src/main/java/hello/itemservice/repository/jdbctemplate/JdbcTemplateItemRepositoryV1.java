@@ -59,7 +59,7 @@ public class JdbcTemplateItemRepositoryV1 implements ItemRepository {
     @Override
     public Optional<Item> findById(Long id) {
         // 쿼리 실행 후 결과가 null 일때 예외 처리 해야함
-        String sql = "select id, item_name, price, quantity where id=?";
+        String sql = "select id, item_name, price, quantity from item where id=?";
         try {
             Item item = template.queryForObject(sql, itemRowMapper(), id);
             return Optional.of(item);
@@ -75,7 +75,7 @@ public class JdbcTemplateItemRepositoryV1 implements ItemRepository {
         String itemName = cond.getItemName();
         Integer maxPrice = cond.getMaxPrice();
 
-        String sql = "select id, item_name, price, quantity form item";
+        String sql = "select id, item_name, price, quantity from item";
 
         // 동적 쿼리 넣는 경우
         if (StringUtils.hasText(itemName) || maxPrice != null) {
@@ -102,6 +102,7 @@ public class JdbcTemplateItemRepositoryV1 implements ItemRepository {
         // return template.query(sql, itemRowMapper());
     }
 
+    // 데이터베이스의 조회결과를 객체로 변환할 때 사용
     private RowMapper<Item> itemRowMapper() {
         return ((rs, rowNum) -> {
             Item item = new Item();
